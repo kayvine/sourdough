@@ -1,0 +1,37 @@
+<div class="header container">
+  <h1 class="title is-inline-block is-family-secondary is-2 is-spaced">
+    Item Types
+  </h1>
+  <!-- <button class="button add-btn--right is-primary">
+    <span>Create new type</span>
+  </button> -->
+  <h2 class="subtitle">
+    Manage different item types
+  </h2>
+</div>
+
+<div class="container">
+  <table class="table is-fullwidth is-hoverable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Title</th>
+        <th>Icon (fa-...)</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let type of types">
+        <td>{{ type.name }}</td>
+        <td>{{ type.title }}</td>
+        <td>{{ type.icon }}</td>
+        <td>{{ type.description }}</td>
+        <!-- <td>
+          <button class="button">Button</button>
+          <button class="button">Button</button>
+          <button class="button">Button</button>
+        </td> -->
+      </tr>
+    </tbody>
+  </table>
+</div>

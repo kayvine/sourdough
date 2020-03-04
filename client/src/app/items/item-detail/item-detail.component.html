@@ -1,0 +1,16 @@
+<div *ngIf="item$ | async as item; else loading">
+  <div class="header container">
+    <h2 class="title is-3">Details</h2>
+  </div>
+  <section class="section">
+    <div class="container">
+      <p>Title: {{ item.title }}</p>
+
+      <button class="button is-text" (click)="goBackToList()">Back</button>
+    </div>
+  </section>
+</div>
+
+<ng-template #loading>
+  <div class="header container">Loading ...</div>
+</ng-template>

@@ -1,0 +1,87 @@
+<section class="hero is-fullheight">
+  <!-- Hero content: will be in the middle -->
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-4">
+          <form [formGroup]="form">
+            <div
+              class="notification is-danger is-light"
+              *ngIf="authService.errorMessage"
+            >
+              {{ authService.errorMessage }}
+            </div>
+
+            <div class="field">
+              <div class="control has-icons-left">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    (email.errors?.required && email.pending) ||
+                    (email.errors?.email && email.touched)
+                  "
+                  type="email"
+                  name="email"
+                  formControlName="email"
+                  placeholder="Email"
+                />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="email.errors?.required && email.pending"
+              >
+                Email is required
+              </p>
+              <p
+                class="help is-danger"
+                *ngIf="email.errors?.email && email.touched"
+              >
+                This email is invalid
+              </p>
+            </div>
+
+            <div class="field">
+              <div class="control has-icons-left">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    password.errors?.required && password.pending
+                  "
+                  name="password"
+                  formControlName="password"
+                  type="password"
+                  placeholder="Password"
+                />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="password.errors?.required && password.pending"
+              >
+                Password is required
+              </p>
+            </div>
+
+            <div class="control">
+              <button
+                type="submit"
+                class="button is-primary is-fullwidth"
+                (click)="login()"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+          <p class="no-account">
+            No account? <a routerLink="/register">Register here</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,33 @@
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card" style="min-height: 440px;">
+    <header class="modal-card-head">
+      <p class="modal-card-title">&nbsp;</p>
+      <button class="delete" aria-label="close" (click)="cancel()"></button>
+    </header>
+    <section class="modal-card-body">
+      <div class="bd-content">
+        <nav class="bd-links">
+          <a
+            class="bd-link"
+            *ngFor="let type of types"
+            [routerLink]="[type.name]"
+          >
+            <h2 class="bd-link-name">
+              <figure class="bd-link-figure">
+                <span class="icon has-text-link">
+                  <i class="fas fa-{{ type.icon }}"></i>
+                </span>
+              </figure>
+              {{ type.title }}
+            </h2>
+            <p class="bd-link-subtitle">
+              {{ type.description }}
+            </p>
+          </a>
+        </nav>
+      </div>
+    </section>
+    <footer class="modal-card-foot"></footer>
+  </div>
+</div>

@@ -1,0 +1,145 @@
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card" style="min-height: 440px;">
+    <header class="modal-card-head">
+      <a class="link-grey" (click)="goBack()">
+        <span class="icon">
+          <i class="fas fa-arrow-left"></i>
+        </span>
+      </a>
+      <p class="modal-card-title">&nbsp;</p>
+      <button class="delete" aria-label="close" (click)="cancel()"></button>
+    </header>
+    <section class="modal-card-body">
+      <form [formGroup]="form">
+        <div class="notification is-danger" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <input
+          class="is-hidden is-invisible"
+          type="text"
+          formControlName="type"
+        />
+
+        <div class="field">
+          <div class="control">
+            <input
+              class="input"
+              [class.is-danger]="
+                title.invalid && (title.dirty || title.touched)
+              "
+              type="text"
+              formControlName="title"
+              placeholder="Title"
+              required
+            />
+          </div>
+          <p
+            class="help is-danger"
+            *ngIf="title.errors?.required && (title.dirty || title.touched)"
+          >
+            Title is required
+          </p>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <textarea
+              class="textarea"
+              [class.is-danger]="
+                description.invalid &&
+                (description.dirty || description.touched)
+              "
+              type="text"
+              formControlName="description"
+              placeholder="Description"
+              required
+            ></textarea>
+          </div>
+          <p
+            class="help is-danger"
+            *ngIf="
+              description.errors?.required &&
+              (description.dirty || description.touched)
+            "
+          >
+            Description is required
+          </p>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    (price.invalid && price.touched) || errorMessage
+                  "
+                  type="number"
+                  formControlName="price"
+                  placeholder="Price"
+                />
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="price.errors?.required && (price.dirty || price.touched)"
+              >
+                Price is required
+              </p>
+              <p
+                class="help is-danger"
+                *ngIf="price.errors?.price && price.touched"
+              >
+                Price needs to be a number
+              </p>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    amount.invalid && (amount.dirty || amount.touched)
+                  "
+                  type="number"
+                  formControlName="amount"
+                  placeholder="Amount"
+                />
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="
+                  amount.errors?.required && (amount.dirty || amount.touched)
+                "
+              >
+                Amount is required
+              </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+    <footer class="modal-card-foot">
+      <div class="field is-grouped">
+        <div class="control">
+          <button
+            class="button is-primary"
+            [class.is-loading]="loading"
+            (click)="createItem()"
+            [disabled]="!form.valid"
+          >
+            Save
+          </button>
+        </div>
+
+        <div class="control">
+          <button class="button is-primary is-light" (click)="cancel()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

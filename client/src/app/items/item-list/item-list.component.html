@@ -1,0 +1,191 @@
+<div class="header container">
+  <h1 class="title main is-inline-block is-2">Content management</h1>
+  <button
+    class="button add-btn--right is-primary"
+    [routerLink]="[{ outlets: { popup: ['create'] } }]"
+  >
+    <span>Create Content</span>
+  </button>
+
+  <h2 class="subtitle">Manage your content here, duh!</h2>
+</div>
+
+<div class="container">
+  <div class="columns">
+    <div class="column is-narrow">
+      <aside class="menu" style="width: 140px;">
+        <p class="menu-label">View by Status</p>
+        <ul class="menu-list">
+          <li *ngFor="let bucket of buckets">
+            <a
+              [class.is-active]="bucket.name === activeView"
+              [routerLink]="['/content', { bucket: bucket.name }]"
+            >
+              {{ bucket.value }}
+            </a>
+          </li>
+        </ul>
+        <p class="menu-label">View by Type</p>
+        <ul class="menu-list">
+          <li *ngFor="let type of types">
+            <a
+              [class.is-active]="type.name === activeView"
+              [routerLink]="['/content', { t: type.name }]"
+            >
+              {{ type.name | titlecase }}
+            </a>
+          </li>
+        </ul>
+      </aside>
+    </div>
+    <div class="column">
+      <div class="listOuter">
+        <!-- actionbar -->
+        <div class="actionBar">
+          <div
+            class="selectActions"
+            [class.selectActions--visible]="selected.length !== 0"
+          >
+            <span class="selectActions_selectionCount">
+              <!-- if 1 item => 'item' (singular) -->
+              <span>{{ selected.length }} item(s)</span> selected
+            </span>
+            <div class="buttons">
+              <button class="button is-light" (click)="deselectAll()">
+                Deselect All
+              </button>
+
+              <!-- Possible feature: 'add to folder' -->
+              <button class="button folders-btn">Move To</button>
+
+              <button class="button is-light">Delete</button>
+            </div>
+          </div>
+          <div class="searchBox">
+            <div class="control has-icons-left">
+              <input #input class="input" type="text" placeholder="Search" />
+              <span class="icon is-small is-left">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+          </div>
+          <div class="sortDropDown">
+            <div class="select">
+              <select #select>
+                <option *ngFor="let s of sortables">{{ s.value }}</option>
+              </select>
+            </div>
+            <!-- <div
+              #sort
+              class="dropdown is-right"
+              [class.is-active]="sort.clicked"
+            >
+              <div class="dropdown-trigger">
+                <button
+                  class="button"
+                  [value]="sortedBy"
+                  aria-haspopup="true"
+                  aria-controls="sort-dropdown"
+                  (click)="sort.clicked = true"
+                >
+                  <span>Last updated {{ sort.value }}</span>
+                  <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+              <div class="dropdown-menu" id="sort-dropdown">
+                <div class="dropdown-content">
+                  <a class="dropdown-item" *ngFor="let s of sortBy">
+                    {{ s.value }}
+                  </a>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <!-- !actionbar -->
+
+        <ul class="item-list" *ngIf="items$; else loading">
+          <li
+            class="item is-flex"
+            *ngFor="let item of items$ | async; index as i"
+          >
+            <div class="item__checkbox">
+              <input
+                type="checkbox"
+                class="checkbox itemCheckBoxInput"
+                [ngModel]="isSelected(item._id)"
+                (change)="onChange(item._id, $event.target.checked)"
+              />
+            </div>
+            <div class="item__icon">
+              <!-- <v-icon v-text="item.icon"></v-icon> -->
+              <span class="icon"><i class="far fa-lg fa-envelope"></i></span>
+            </div>
+            <div class="item__details">
+              <h4>{{ item.title }}</h4>
+              <p>
+                <span>{{ item.__t }} </span>
+                <span>by <strong>username</strong></span>
+              </p>
+            </div>
+            <div class="item__status">
+              <span
+                class="tag is-light ma-1"
+                [class.is-success]="item.status === 'published'"
+              >
+                Draft
+              </span>
+            </div>
+            <div class="item__stats"></div>
+            <div class="item__actions">
+              <!-- <div *ngClass="hover ? 'd-flex' : 'd-none'"> -->
+              <div class="buttons has-addons">
+                <button
+                  class="button is-light"
+                  routerLink="/items/{{ item._id }}/details"
+                >
+                  View
+                </button>
+                <!-- <template v-slot:activator="{ on: menu }"> -->
+                <div class="dropdown is-right is-hoverable">
+                  <div class="dropdown-trigger">
+                    <button
+                      class="button is-light"
+                      aria-haspopup="true"
+                      aria-controls="item_nav"
+                    >
+                      <span class="icon is-small">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                      </span>
+                    </button>
+                  </div>
+                  <div class="dropdown-menu" id="item_nav" role="menu">
+                    <div class="dropdown-content">
+                      <a
+                        class="dropdown-item"
+                        routerLink="/items/{{ item._id }}/edit"
+                        >Edit</a
+                      >
+                      <a class="dropdown-item" (click)="delete(item._id)">
+                        Delete
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- </template> -->
+              <!-- </div> -->
+            </div>
+
+            <hr />
+          </li>
+        </ul>
+        <ng-template #loading>
+          <div>Loading...</div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+// .navbar-item:not(.has-dropdown) {
+//   padding-top: 0.75rem;
+//   padding-bottom: 0.75rem;
+// }
+
+#itemsDropdown .navbar-item {
+  padding-left: 3em;
+  position: relative;
+}
+
+#itemsDropdown .icon {
+  left: 1rem;
+  position: absolute;
+  text-align: center;
+  top: 0.6rem;
+  width: 1em;
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+  // font-size: 1.4rem;
+  // line-height: 18px;
+  margin: 0 6px 0 12px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media screen and (min-width: 1024px) {
+  #itemsDropdown .navbar-item {
+    padding-right: 1rem;
+    white-space: normal;
+  }
+
+  #itemsDropdown {
+    width: 14rem;
+  }
+}

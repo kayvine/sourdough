@@ -1,0 +1,85 @@
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Libre+Baskerville|Nunito:400,700');
+
+// Set your brand colors
+$teal: #007c89; // mailchimp
+$tealgreen: #008779;
+$gunmetal: #676879;
+$beige-light: #c6c6cc;
+$beige-lighter: #ececee;
+$scheme-invert: hsl(0, 0%, 4%); // standard value
+
+// Update Bulma's global variables
+$family-sans-serif: 'Nunito', sans-serif;
+$family-primary: 'Nunito', sans-serif;
+$family-secondary: 'Libre Baskerville', serif;
+$grey-dark: $gunmetal;
+$grey-light: $beige-light;
+$primary: $gunmetal;
+$link: $tealgreen;
+
+// Update some of Bulma's component variables
+// $input-background-color: $beige-lighter;
+// $input-border-color: transparent;
+// $input-shadow: none;
+$navbar-item-hover-color: $scheme-invert;
+$navbar-item-active-color: $link;
+$menu-item-active-color: $link;
+$menu-item-active-background-color: transparent;
+$menu-label-font-size: 1rem;
+$menu-label-letter-spacing: 0;
+
+// Import the rest of Bulma
+@import 'node_modules/bulma/bulma.sass';
+
+body {
+  background-color: #fafafa;
+  height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title {
+  font-weight: inherit;
+}
+
+.header {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.title.main {
+  font-family: 'Libre Baskerville', serif !important;
+  text-transform: capitalize;
+}
+
+.menu-label {
+  text-transform: none;
+}
+
+.modal-card-head,
+.modal-card-foot {
+  background-color: white;
+}
+
+.add-btn--right {
+  float: right;
+  margin: 6px 0 0 15px;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+.link-grey {
+  color: rgba(10, 10, 10, 0.3);
+
+  &:hover {
+    background-color: white;
+    color: rgba(10, 10, 10, 0.4);
+  }
+}

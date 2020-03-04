@@ -1,0 +1,200 @@
+<section class="hero is-fullheight">
+  <!-- Hero content: will be in the middle -->
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5">
+          <form [formGroup]="form">
+            <div class="field">
+              <label class="label">First Name</label>
+              <div class="control">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    firstName.invalid && (firstName.dirty || firstName.touched)
+                  "
+                  type="text"
+                  formControlName="firstName"
+                  required
+                />
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="
+                  firstName.errors?.required &&
+                  (firstName.dirty || firstName.touched)
+                "
+              >
+                First name is required
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="label">Last Name</label>
+              <div class="control">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    lastName.invalid && (lastName.dirty || lastName.touched)
+                  "
+                  type="text"
+                  formControlName="lastName"
+                  required
+                />
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="
+                  lastName.errors?.required &&
+                  (lastName.dirty || lastName.touched)
+                "
+              >
+                Last name is required
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="label">Company Name</label>
+              <div class="control">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    company.invalid && (company.dirty || company.touched)
+                  "
+                  type="text"
+                  formControlName="company"
+                  required
+                />
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="
+                  company.errors?.required && (company.dirty || company.touched)
+                "
+              >
+                Company name is required
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    (email.invalid && email.touched) || errorMessage
+                  "
+                  type="email"
+                  formControlName="email"
+                  required
+                />
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="email.errors?.required && (email.dirty || email.touched)"
+              >
+                Email is required
+              </p>
+              <p
+                class="help is-danger"
+                *ngIf="email.errors?.email && email.touched"
+              >
+                This email is invalid
+              </p>
+              <p class="help is-danger" *ngIf="errorMessage">
+                {{ errorMessage }}
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    password.invalid && (password.dirty || password.touched)
+                  "
+                  type="password"
+                  formControlName="password"
+                  required
+                />
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="
+                  password.errors?.required &&
+                  (password.dirty || password.touched)
+                "
+              >
+                Password is required
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="label">Confirm Password</label>
+              <div class="control">
+                <input
+                  class="input"
+                  [class.is-danger]="
+                    (form.errors?.mismatched ||
+                      confirmPassword.errors?.required) &&
+                    (confirmPassword.dirty || confirmPassword.touched)
+                  "
+                  type="password"
+                  formControlName="confirmPassword"
+                  required
+                />
+              </div>
+              <p
+                class="help is-danger"
+                *ngIf="
+                  confirmPassword.errors?.required &&
+                  (confirmPassword.dirty || confirmPassword.touched)
+                "
+              >
+                Password confirmation is required
+              </p>
+              <p
+                class="help is-danger cross-validation-error-message"
+                *ngIf="
+                  form.errors?.mismatched &&
+                  (confirmPassword.dirty || confirmPassword.touched)
+                "
+              >
+                Mismatch password
+              </p>
+            </div>
+
+            <!-- <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" />
+            I agree to the <a href="#">terms and conditions</a>
+          </label>
+        </div>
+      </div> -->
+
+            <div class="field is-grouped">
+              <div class="control">
+                <button
+                  class="button is-primary"
+                  [class.is-loading]="loading"
+                  (click)="register()"
+                  [disabled]="!form.valid"
+                >
+                  Register
+                </button>
+              </div>
+
+              <div class="control">
+                <button class="button is-primary is-light" (click)="goBack()">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

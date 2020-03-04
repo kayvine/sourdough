@@ -1,0 +1,141 @@
+.listOuter {
+  padding-left: 68px;
+  position: relative;
+}
+
+.actionBar {
+  padding-bottom: 20px;
+
+  .selectActions {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    visibility: hidden;
+    top: -12px;
+    left: 0;
+    opacity: 0;
+    padding-bottom: 12px;
+    padding-left: 3rem;
+    width: 100%;
+    background-color: #fafafa;
+    z-index: 10;
+    transition: opacity 0.3s cubic-bezier(0.62, 0.25, 0.15, 0.87),
+      top 0.3s cubic-bezier(0.62, 0.25, 0.15, 0.87), z-index 0.3s ease-in,
+      visibility 0s 0.3s;
+  }
+
+  .selectActions--visible {
+    visibility: visible;
+    opacity: 1;
+    top: 0;
+    transition: opacity 0.3s cubic-bezier(0.62, 0.25, 0.15, 0.87),
+      top 0.3s cubic-bezier(0.62, 0.25, 0.15, 0.87), z-index 0.3s ease-in,
+      visibility 0s 0s;
+  }
+
+  .selectActions_selectionCount {
+    padding-right: 12px;
+  }
+
+  .searchBox {
+    max-width: 460px;
+    padding-left: 6px;
+  }
+
+  .sortDropDown {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+.item-list {
+  padding-top: 1.1rem;
+}
+
+/* List component */
+.item {
+  padding-left: 4px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  position: relative;
+  border-top: 1px solid #e0e0e0;
+
+  &:first-child {
+    border-top: none;
+  }
+
+  .item__checkbox {
+    position: absolute;
+    top: 22px;
+    left: -30px;
+    padding-right: 12px;
+    height: calc(100% - 22px);
+
+    .itemCheckBoxInput {
+      width: 20px;
+      height: 20px;
+    }
+
+    input[type='checkbox'] {
+      display: none;
+
+      &:checked {
+        display: flex;
+      }
+    }
+  }
+
+  .item__icon {
+    margin-right: 18px;
+  }
+
+  .item__details {
+    flex: 0 1 200px;
+  }
+
+  .item__status {
+    flex: 0 0 120px;
+
+    // .success {
+    //   background-color: #d8eacc !important;
+    //   color: #241c15;
+    // }
+  }
+
+  .item__stats {
+    flex: 1 0 auto;
+    min-width: 80px;
+  }
+
+  .item__actions {
+    display: flex;
+    flex: 0 0 180px;
+    justify-content: flex-end;
+
+    .buttons .button {
+      margin-bottom: 0;
+    }
+
+    .buttons.has-addons {
+      .button:not(:last-child) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        margin-right: 2px;
+      }
+
+      .button:last-child {
+        margin-right: 0;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+      }
+    }
+  }
+
+  &:hover {
+    .item__checkbox input[type='checkbox'] {
+      display: flex;
+    }
+  }
+}
