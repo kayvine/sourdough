@@ -1,32 +1,29 @@
-import { verify } from 'jsonwebtoken';
+import { verify, Secret } from 'jsonwebtoken';
 
-export default ({ whitelist }) => (req: any, res: any, next: any) => {
+interface AuthOptions {
+  whitelist: string[];
+}
+
+export default ({ whitelist }: AuthOptions) => (req: any, res: any, next: any) => {
   if (whitelist.some((path: string) => req.path.startsWith(path))) {
     next();
   }
 
-  if (
-    req.header('Authorization') &&
-    req.header('Authorization').split(' ')[1]
-  ) {
+  if (req.header('Authorization') && req.header('Authorization').split(' ')[1]) {
     const token = req.header('Authorization').replace('Bearer ', '');
 
-    verify(token, process.env.SECRET, (err: any, decoded: any) => {
+    verify(token, process.env.SECRET as Secret, (err: any, decoded: any) => {
       if (err) {
         res.status(401).json({ error: 'Could not verify the token', err });
       }
       if (!decoded) {
-        res
-          .status(401)
-          .json({ error: 'Not authorized to access this resource' });
+        res.status(401).json({ error: 'Not authorized to access this resource' });
       } else {
         req.token = token;
         next();
       }
     });
   } else {
-    res
-      .status(401)
-      .send({ error: 'No Authorization header with Bearer token' });
+    res.status(401).send({ error: 'No Authorization header with Bearer token' });
   }
 };

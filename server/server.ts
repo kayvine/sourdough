@@ -1,62 +1,60 @@
-require('dotenv').config();
+import * as mongoose from 'mongoose';
+import express from 'express';
+import cors from 'cors';
 import environment from './config/environment';
-import express from './config/express';
 // import log from "./logger/log";
-import { Express } from 'express';
-import { IndexRoute } from './routes/index.route';
-import { errorHandling } from './middleware/errorhandling';
-require('./config/mongoose');
+import authorisation from './middleware/authorisation';
+import { errorHandling } from './middleware/error-handling';
+import { apiRoutes } from './index';
+require('dotenv').config();
 
-class App {
-  private readonly app: Express;
-  private indexRoute: IndexRoute;
+mongoose
+  .connect(`${process.env.MONGO_URI}`, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .catch((error) => console.log(error));
+mongoose.connection
+  .on('error', () => {
+    console.log(`unable to connect to database: ${environment.MONGO_DATABASE}`);
+  })
+  .once('open', () => console.log('MongoDB connected...'));
 
-  constructor() {
-    this.app = express;
-    this.indexRoute = new IndexRoute();
-    this.routes();
-    this.listen();
-  }
+const app = express();
 
-  /**
-   * @return Express application
-   */
-  public getApp(): Express {
-    return this.app;
-  }
+app.use(cors());
 
-  /**
-   * Define Routes and error handling middleware
-   */
-  private routes(): void {
-    // Routes middleware
-    this.app.use('/api', this.indexRoute.getApi());
+app.use(authorisation({ whitelist: ['/authenticate'] }));
 
-    // Error handler middleware
-    this.app.use(errorHandling);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-    this.app.use((error: any, req: any, res: any, next: any) => {
-      res.status(error.status || 500);
-      res.json({
-        name: error.name || '',
-        message: error.message,
-        status: error.status || 500
-      });
-      // log.error(error.toString());
-      console.error(error.toString());
-    });
-  }
+// jwtStrategy(passport); // require('./passport')(passport);
 
-  /**
-   * Start application server
-   */
-  private listen(): void {
-    this.app.listen(environment.PORT, () => {
-      console.log(
-        `Started on http://${environment.API_URL}:${environment.PORT}`
-      );
-    });
-  }
-}
+// app.use(initialize());
+// app.use(session());
 
-export default new App().getApp();
+app.use('/api', apiRoutes);
+
+// Error handler middleware
+app.use(errorHandling);
+
+app.use((error: any, req: any, res: any, next: any) => {
+  res.status(error.status || 500);
+  res.json({
+    name: error.name || '',
+    message: error.message,
+    status: error.status || 500,
+  });
+  // log.error(error.toString());
+  console.error(error);
+});
+
+/**
+ * Start application server
+ */
+app.listen(environment.PORT, () => {
+  console.log(`Started on http://${environment.API_URL}:${environment.PORT}`);
+});

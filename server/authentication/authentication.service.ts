@@ -1,18 +1,14 @@
 import * as bcrypt from 'bcryptjs';
 import { sign, SignOptions } from 'jsonwebtoken';
 import { UserDao } from '../users/user.dao';
-import { IUser } from '../users/user.model';
+import User, { IUser } from '../users/user.model';
 
 export class AuthenticationService {
-  private userDao: UserDao;
+  constructor(private userDao: UserDao) {}
 
-  constructor() {
-    this.userDao = new UserDao();
-  }
-
-  public async authenticate({ email, password }): Promise<String> {
+  async authenticate({ email, password }): Promise<String> {
     try {
-      const user = await this.userDao.findByEmail(email);
+      const user = await this.userDao.findByEmail(email); // replace  with static/method
       if (!user) {
         throw new Error('Login failed! User not found.');
       }
@@ -32,7 +28,7 @@ export class AuthenticationService {
       email: user.email,
       company: user.company,
       test: true,
-      exp: Date.now() + 2 * 60 * 60 * 1000 // 2 hours in milliseconds
+      exp: Date.now() + 2 * 60 * 60 * 1000, // 2 hours in milliseconds
     };
 
     // options:
@@ -50,7 +46,7 @@ export class AuthenticationService {
     // mutatePayload: if true, the sign function will modify the payload object directly. This is useful if you need a raw reference to the payload after claims have been applied to it but before it has been encoded into a token.
     const options: SignOptions = {
       subject: user.id,
-      audience: 'sourdough'
+      audience: 'sourdough',
     };
     return sign(payload, process.env.SECRET);
     // return {
@@ -62,3 +58,7 @@ export class AuthenticationService {
     // };
   }
 }
+
+export default {
+  authenticate,
+};

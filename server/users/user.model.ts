@@ -1,5 +1,5 @@
 import { Schema, Document, model } from 'mongoose';
-import validator from 'validator';
+// import validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 
 export interface IUser extends Document {
@@ -18,19 +18,20 @@ const userSchema: Schema = new Schema({
     required: true,
     unique: true,
     lowercase: true,
-    validate: value => {
-      if (!validator.isEmail(value)) {
-        throw new Error('Invalid Email address');
-      }
-      return validator.isEmail(value);
-    }
+    // validate: (value) => {
+    //   if (!validator.isEmail(value)) {
+    //     throw new Error('Invalid Email address');
+    //   }
+    //   return validator.isEmail(value);
+    // },
   },
   password: { type: String, required: true },
   company: { type: String, required: true },
-  date: { type: Date, default: Date.now }
+  createdOn: { type: Date, default: Date.now },
+  modifiedOn: { type: Date, default: Date.now, set: Date.now },
 });
 
-userSchema.pre('save', async function(this: IUser, next) {
+userSchema.pre('save', async function (this: IUser, next) {
   // Hash the password before saving the user model
   const user = this;
   if (user.isModified('password')) {

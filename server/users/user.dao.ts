@@ -1,8 +1,8 @@
 import { DataNotFoundException } from '../exceptions/datanotfound.exception';
-import UserModel, { IUser } from './user.model';
+import User, { IUser } from './user.model';
 
 /**
- * User data access functions
+ * User data access functions => replace with statics of mongoose
  */
 export class UserDao {
   /**
@@ -10,7 +10,7 @@ export class UserDao {
    * @return a promise with created user
    */
   public createUser(user: IUser): Promise<IUser> {
-    return UserModel.create(user);
+    return User.create(user);
   }
 
   /**
@@ -19,14 +19,14 @@ export class UserDao {
    * @return a promise with all users
    */
   public findAllUsers() {
-    return UserModel.find().exec();
+    return User.find().exec();
   }
 
   public findById(id: string) {
-    return UserModel.findById(id).exec();
+    return User.findById(id).exec();
   }
 
   public findByEmail(email: string): Promise<IUser> {
-    return UserModel.findOne({ email: email }).exec();
+    return User.findOne({ email: email }).exec();
   }
 }

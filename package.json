@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "description here",
   "scripts": {
-    "start": "ts-node ./server/server.ts",
-    "dev": "nodemon --ignore client/ --ext \".ts\" --exec \"npm run start\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon --ignore client/ --ext \".ts\" --exec \"ts-node ./server/server.ts\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "tsc && node ./build/app.js"
   },
   "author": "Kevin Delmé",
   "license": "ISC",
@@ -15,22 +15,20 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.8.9",
+    "mongoose": "~5.9",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "typescript": "^3.7.5",
-    "validator": "^12.1.0"
+    "typescript": "^3.9.3",
+    "validator": "^13.0.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
-    "@types/express": "^4.17.2",
-    "@types/jsonwebtoken": "^8.3.7",
-    "@types/mongoose": "^5.5.43",
-    "@types/node": "^12.12.25",
-    "@types/passport": "^1.0.2",
-    "@types/passport-jwt": "^3.0.3",
-    "@types/validator": "^12.0.1",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.6",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.7.22",
+    "@types/node": "^14.0.11",
     "nodemon": "^2.0.2",
-    "ts-node": "^8.6.2"
+    "ts-node": "^8.10.2"
   }
 }

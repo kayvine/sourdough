@@ -8,10 +8,8 @@ import { UserService } from './user.service';
  */
 export class UserRoute {
   private api: Router = Router();
-  private userService: UserService;
 
-  constructor() {
-    this.userService = new UserService();
+  constructor(private userService: UserService) {
     this.routes();
   }
 
@@ -31,7 +29,7 @@ export class UserRoute {
       const user: IUser = req.body;
       this.userService
         .createUser(user)
-        .then(value => res.status(201).json({ payload: value }))
+        .then((value) => res.status(201).json({ payload: value }))
         .catch(next);
     });
 
@@ -39,7 +37,7 @@ export class UserRoute {
     this.api.get('/', (req: Request, res: Response, next: NextFunction) => {
       this.userService
         .findAllUsers()
-        .then(value => res.status(200).json({ payload: value }))
+        .then((value) => res.status(200).json({ payload: value }))
         .catch(next);
     });
 
