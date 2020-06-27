@@ -8,19 +8,20 @@ import { errorHandling } from './middleware/error-handling';
 import { apiRoutes } from './index';
 require('dotenv').config();
 
-mongoose
-  .connect(`${process.env.MONGO_URI}`, {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  })
-  .catch((error) => console.log(error));
-mongoose.connection
-  .on('error', () => {
+(async () => {
+  try {
+    await mongoose.connect(`${process.env.MONGO_URI}`, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
+    console.log('MongoDB connected...');
+  } catch (error) {
     console.log(`unable to connect to database: ${environment.MONGO_DATABASE}`);
-  })
-  .once('open', () => console.log('MongoDB connected...'));
+    console.log(error);
+  }
+})();
 
 const app = express();
 
@@ -36,7 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(initialize());
 // app.use(session());
 
-app.use('/api', apiRoutes);
+app.use('/api', apiRoutes());
 
 // Error handler middleware
 app.use(errorHandling);

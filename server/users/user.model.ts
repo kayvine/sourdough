@@ -1,8 +1,8 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, Document, Model, model } from 'mongoose';
 // import validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 
-export interface IUser extends Document {
+export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
@@ -31,7 +31,11 @@ const userSchema: Schema = new Schema({
   modifiedOn: { type: Date, default: Date.now, set: Date.now },
 });
 
-userSchema.pre('save', async function (this: IUser, next) {
+export interface IUserDocument extends IUser, Document {
+  findOfSameCompany: (this: IUserDocument) => Promise<IUser[]>;
+}
+
+userSchema.pre('save', async function (this: IUserDocument, next) {
   // Hash the password before saving the user model
   const user = this;
   if (user.isModified('password')) {
@@ -39,6 +43,18 @@ userSchema.pre('save', async function (this: IUser, next) {
   }
   next();
 });
+
+userSchema.methods.findOfSameCompany = async function findOfSameCompany(this: IUserDocument): Promise<IUser[]> {
+  return await User.find({ company: this.company }).lean();
+};
+
+export interface IUserModel extends Model<IUserDocument> {
+  findByEmail: (this: IUserModel, email: string) => Promise<IUserDocument>;
+}
+
+userSchema.statics.findByEmail = function findByEmail(email: string): Promise<IUserDocument> {
+  return this.find({ email: email });
+};
 
 // userSchema.statics.findByCredentials = async (email, password) => {
 //   // Search for a user by email and password.
@@ -54,4 +70,4 @@ userSchema.pre('save', async function (this: IUser, next) {
 // }
 
 // Export the model and return your IUser interface
-export default model<IUser>('User', userSchema);
+export const User = model<IUserDocument, IUserModel>('User', userSchema);

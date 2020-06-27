@@ -1,29 +1,28 @@
-import { IUser } from './user.model';
-import { UserService } from './user.service';
+import { User, IUser } from './user.model';
+import { EmailAlreadyExistsException } from '../exceptions/emailalreadyexists.exception';
 
-export class UserController {
-  private userService: UserService;
-
-  constructor() {
-    this.userService = new UserService();
+export const createUser = async (user: IUser): Promise<IUser> => {
+  try {
+    const isRegistered = await User.findByEmail(user.email);
+    console.log(isRegistered);
+    const samesies = await isRegistered.findOfSameCompany();
+    console.log(samesies);
+    if (isRegistered) {
+      // User exists
+      throw new Error('Email is already registered.');
+    } else {
+      // Save user
+      return User.create(user);
+    }
+  } catch (error) {
+    throw new EmailAlreadyExistsException(error.message);
   }
+};
 
-  public createUser(req: any, res: any, next: any) {
-    const user: IUser = req.body;
-    this.userService
-      .createUser(user)
-      .then(response => {
-        res.status(201).send(response);
-      })
-      .catch(next);
-  }
+export function findAllUsers(): Promise<IUser[]> {
+  return User.find().exec();
+}
 
-  public getAllUsers(req: any, res: any, next: any) {
-    this.userService
-      .findAllUsers()
-      .then(value => {
-        res.status(200).send(value);
-      })
-      .catch(next);
-  }
+export function findById(id: string): Promise<IUser | null> {
+  return User.findById(id).exec();
 }

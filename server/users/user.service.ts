@@ -1,34 +1,25 @@
-import { IUser } from './user.model';
-import { UserDao } from './user.dao';
+import { User, IUser } from './user.model';
 import { EmailAlreadyExistsException } from '../exceptions/emailalreadyexists.exception';
 
-export class UserService {
-  private userDao: UserDao;
-
-  constructor() {
-    this.userDao = new UserDao();
-  }
-
-  public async createUser(user: IUser): Promise<IUser> {
-    try {
-      const isRegistered = await this.userDao.findByEmail(user.email);
-      if (isRegistered) {
-        // User exists
-        throw new Error('Email is already registered.');
-      } else {
-        // Save user
-        return this.userDao.createUser(user);
-      }
-    } catch (error) {
-      throw new EmailAlreadyExistsException(error.message);
+export const createUser = async (user: IUser): Promise<IUser> => {
+  try {
+    const isRegistered = await User.schema.statics.findByEmail(user.email);
+    if (isRegistered) {
+      // User exists
+      throw new Error('Email is already registered.');
+    } else {
+      // Save user
+      return User.create(user);
     }
+  } catch (error) {
+    throw new EmailAlreadyExistsException(error.message);
   }
+};
 
-  public findAllUsers(): Promise<IUser[]> {
-    return this.userDao.findAllUsers();
-  }
+export function findAllUsers(): Promise<IUser[]> {
+  return User.find().exec();
+}
 
-  public findById(id: string): Promise<IUser> {
-    return this.userDao.findById(id);
-  }
+export function findById(id: string): Promise<IUser | null> {
+  return User.findById(id).exec();
 }

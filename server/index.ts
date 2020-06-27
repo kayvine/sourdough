@@ -1,8 +1,8 @@
 import express from 'express';
-import authRoutes from './authentication/authentication.route';
-import { UserRoute } from './users/user.route';
-import { ItemRoute } from './items/item.route';
-import { ItemTypeRoute } from './items/item-type.route';
+import authRouter from './authentication/authentication.route';
+import userRouter from './users/user.route';
+// import itemRouter from './items/item.route';
+// import itemTypeRouter from './items/item-type.route';
 
 /**
  * Root api router specifications
@@ -11,16 +11,12 @@ import { ItemTypeRoute } from './items/item-type.route';
 export const apiRoutes = () => {
   const app = express();
 
-  const userRoutes = new UserRoute();
-  const itemRoutes = new ItemRoute();
-  const itemTypeRoutes = new ItemTypeRoute();
+  app.use('/', authRouter);
 
-  app.use('/', authRoutes);
+  app.use('/users', userRouter);
+  // app.use('/items', itemRouter);
 
-  app.use('/users', userRoutes.getApi());
-  app.use('/items', itemRoutes.getApi());
-
-  app.use('/itemtypes', itemTypeRoutes.getApi());
+  // app.use('/itemtypes', itemTypeRouter);
 
   app.get('/_health', (req, res) => {
     res.status(200).send('OK');
