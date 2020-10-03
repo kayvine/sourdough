@@ -1,5 +1,5 @@
-import * as bcrypt from 'bcryptjs';
 import { sign, SignOptions, Secret } from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
 import { User, IUser } from '../users/user.model';
 
 function createToken(user: IUser): String {
@@ -25,7 +25,7 @@ function createToken(user: IUser): String {
   // keyid
   // mutatePayload: if true, the sign function will modify the payload object directly. This is useful if you need a raw reference to the payload after claims have been applied to it but before it has been encoded into a token.
   const options: SignOptions = {
-    subject: user.id,
+    subject: user._id,
     audience: 'sourdough',
   };
   return sign(payload, process.env.SECRET as Secret);
@@ -39,17 +39,13 @@ function createToken(user: IUser): String {
 }
 
 export const authenticate = async ({ email, password }: any): Promise<String> => {
-  try {
-    const user = await User.schema.statics.findByEmail(email);
-    if (!user) {
-      throw new Error('Login failed! User not found.');
-    }
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      throw new Error('Login failed! Password is incorrect.');
-    }
-    return createToken(user);
-  } catch (error) {
-    throw error;
+  const user = await User.findByEmail(email);
+  if (!user) {
+    throw new Error('Login failed! User not found.');
   }
+  const isPasswordMatch = await bcrypt.compare(password, user.password);
+  if (!isPasswordMatch) {
+    throw new Error('Login failed! Password is incorrect.');
+  }
+  return createToken(user);
 };

@@ -2,7 +2,8 @@ import { Schema, Document, Model, model } from 'mongoose';
 // import validator from 'validator';
 import * as bcrypt from 'bcryptjs';
 
-export interface IUser {
+export interface IUser extends Document {
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -31,7 +32,7 @@ const userSchema: Schema = new Schema({
   modifiedOn: { type: Date, default: Date.now, set: Date.now },
 });
 
-export interface IUserDocument extends IUser, Document {
+export interface IUserDocument extends IUser {
   findOfSameCompany: (this: IUserDocument) => Promise<IUser[]>;
 }
 
@@ -53,7 +54,7 @@ export interface IUserModel extends Model<IUserDocument> {
 }
 
 userSchema.statics.findByEmail = function findByEmail(email: string): Promise<IUserDocument> {
-  return this.find({ email: email });
+  return this.findOne({ email: email });
 };
 
 // userSchema.statics.findByCredentials = async (email, password) => {

@@ -1,10 +1,9 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import environment from './config/environment';
 // import log from "./logger/log";
-import authorisation from './middleware/authorisation';
-import { errorHandling } from './middleware/error-handling';
+import { authorisation } from './middleware/authorisation';
 import { apiRoutes } from './index';
 require('dotenv').config();
 
@@ -21,13 +20,17 @@ require('dotenv').config();
     console.log(`unable to connect to database: ${environment.MONGO_DATABASE}`);
     console.log(error);
   }
+
+  mongoose.connection.on('error', (err) => {
+    console.error(err);
+  });
 })();
 
 const app = express();
 
 app.use(cors());
 
-app.use(authorisation({ whitelist: ['/authenticate'] }));
+app.use(authorisation({ whitelist: ['/api/auth'] }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,17 +43,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', apiRoutes());
 
 // Error handler middleware
-app.use(errorHandling);
+app.use((req, res) => {
+  res.status(404).json;
+});
 
 app.use((error: any, req: any, res: any, next: any) => {
-  res.status(error.status || 500);
-  res.json({
+  console.error(error);
+  res.status(error.status || 500).json({
     name: error.name || '',
     message: error.message,
     status: error.status || 500,
   });
-  // log.error(error.toString());
-  console.error(error);
+  // logger.error(error.toString());
 });
 
 /**

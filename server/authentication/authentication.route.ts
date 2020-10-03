@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { AuthenticationService } from './authentication.service';
-import { UserService } from '../users/user.service';
+import { authenticate } from './authentication.service';
 
 /**
  * "auth" api router specifications
@@ -8,20 +7,14 @@ import { UserService } from '../users/user.service';
  */
 const router = Router();
 
-const authService = new AuthenticationService();
-
-/**
- * Authenticate with
- */
 router.post('/authenticate', async (req: any, res: any, next: any) => {
   try {
-    const token = await authService.authenticate(req.body);
-    // res.set({ Authorization: `Bearer ${token}` });
-    // Send custom JSON object with token etc
+    const token = await authenticate(req.body);
+    // TODO: put token in database?
     res.status(200).json(token);
   } catch (err) {
-    // Send 401 Unauthorized when authentication is required and has failed
-    res.status(401).json({
+    console.error(err);
+    res.status(400).json({
       name: 'LoginError',
       message: err.message,
     });

@@ -4,9 +4,10 @@ interface AuthOptions {
   whitelist: string[];
 }
 
-export default ({ whitelist }: AuthOptions) => (req: any, res: any, next: any) => {
+export const authorisation = ({ whitelist }: AuthOptions) => (req: any, res: any, next: any) => {
   if (whitelist.some((path: string) => req.path.startsWith(path))) {
     next();
+    return;
   }
 
   if (req.header('Authorization') && req.header('Authorization').split(' ')[1]) {
