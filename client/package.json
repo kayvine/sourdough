@@ -21,7 +21,7 @@
     "@angular/router": "~8.2.13",
     "bulma": "^0.8.0",
     "jwt-decode": "^2.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
